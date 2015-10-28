@@ -17,7 +17,6 @@
 */
 
 #include "util.h"
-#include "maf.h"
 #include "mz_scores.h"
 #include "mz_yama.h"
 
@@ -37,7 +36,6 @@ dp_node;
 
 // populate a column from a column of height K and a column of height L
 static void new_col(uchar *from1, int K, uchar *from2, int L, uchar *to_col) {
-    //void new_col(uchar *from1, int K, uchar *from2, int L, uchar *to_col) {
     int i;
 
     for (i = 0; i < K; ++i)
@@ -46,7 +44,6 @@ static void new_col(uchar *from1, int K, uchar *from2, int L, uchar *to_col) {
         to_col[i+K] = from2[i];
 }
 
-// Entry point: (documented in mz_yama.h)
 void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
           uchar ***OAL, int *OM) {
     int C, D, I, i, j, k, m, m_new, n, row, col, s, t, u, v, x, y, z,
@@ -152,8 +149,7 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
                     I = z;
                     flag_i = FLAG_I;
                 }
-                /* Each of n non-dashes in the inserted column
-                * is aligned to K dashes.
+                /* Each of n non-dashes in the inserted column is aligned to K dashes.
                 */
                 for (j = n = 0; j < L; ++j)
                     if (B[col][j] != '-')

@@ -3,10 +3,7 @@
 #include "util.h"
 #include "mz_scores.h"
 
-static const char rcsid[] = "$Id: mz_scores.c 142 2008-11-12 18:55:23Z rico $";
-
-
-int **ss70, **ss85, *gop70, *gop85;
+int **ss70, *gop70;
 
 static const uchar nchars[] = "ACGT";
 static const int HOX70[4][4] = {    // for human-rodent
@@ -16,18 +13,8 @@ static const int HOX70[4][4] = {    // for human-rodent
         {-123, -31,  -114, 91},
 };
 
-static const int HOX85[4][4] = {    // for mouse-rat alignments
-        {86,   -135, -68,  -157},
-        {-135, 100,  -148, -68},
-        {-68,  -148, 100,  -135},
-        {-157, -68,  -135, 86},
-};
-
 #define GAP_OPEN70    400
 #define GAP_EXTEND70    30
-
-#define GAP_OPEN85    600
-#define GAP_EXTEND85    50
 
 #define UNSPECIFIED    -100    // score for an unspecified aligned pair
 

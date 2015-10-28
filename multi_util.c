@@ -7,9 +7,6 @@
 #include "maf.h"
 #include "mz_scores.h"
 #include "multi_util.h"
-//#include "myDebug.h"
-
-static const char rcsid[] = "$Id: multi_util.c 142 2008-11-12 18:55:23Z rico $";
 
 int radius=30;
 int MIN_OUTPUT_WID=1;
@@ -228,7 +225,6 @@ void parseSrcName2(struct mafComp* c ) {
     *ptr = bk;
     if ( *ptr == '\0' || *(ptr+1)=='\0' )
         c->contig = copy_string(c->src);
-    //    fatal("srcName in wrong format 1");
     else {
         ++ptr;
         c->contig = copy_string(ptr);

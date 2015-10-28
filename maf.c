@@ -6,7 +6,6 @@
 #include "util.h"
 #include "maf.h"
 #include "multi_util.h"
-#include "mz_scores.h"
 
 struct mafFile *mafOpen(char *fileName, int verbose) {
     struct mafFile *mf;
@@ -36,7 +35,6 @@ struct mafFile *mafOpen(char *fileName, int verbose) {
 
 /* ------- start of code to read arbitrarily long lines and echo comments --- */
 
-//static int need(unsigned long n, char **linep, unsigned long *np) {
 int need(unsigned long n, char **linep, unsigned long *np) {
     char *p;
 
@@ -49,7 +47,6 @@ int need(unsigned long n, char **linep, unsigned long *np) {
     return 0;
 }
 
-//static unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
 unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
     int ch;
     unsigned long n = 0;
@@ -69,8 +66,6 @@ unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
     return n;
 }
 
-//static unsigned long get_maf_line(char **linep, unsigned long *np, FILE *fp,
-//  struct mafFile *mf) {
 unsigned long get_maf_line(char **linep, unsigned long *np, FILE *fp,
                            struct mafFile *mf) {
     long nn;
@@ -147,12 +142,7 @@ struct mafAli *mafNext(struct mafFile *mf) {
         mf->fp = NULL;
         return NULL;
     }
-    /*
-    if (strncmp(line, "a score=", 8) == 0)
-           	a->score = atof(line+8);
-    else if (line[0] == 'a')
-    	a->score = MIN_INT;
-    */
+
     if ( strncmp(line, "a", 1) == 0)
         strcpy(blockHeaderLine, line);
     else
@@ -236,7 +226,6 @@ void mafWriteEnd(FILE *f) {
     fprintf(f, "##eof maf\n");
 }
 
-//static int digitsBaseTen(int x) {
 int digitsBaseTen(int x) {
     int digCount;
 
@@ -246,7 +235,6 @@ int digitsBaseTen(int x) {
         ;
     return digCount;
 }
-
 
 void mafWrite(FILE *f, struct mafAli *a) {
     struct mafComp *c;
@@ -297,8 +285,6 @@ void mafCompFree(struct mafComp **pComp) {
     struct mafComp *c = *pComp;
 
     if (c != NULL) {
-        //if ( c->name != NULL)
-        //free(c->name);
         free(c->src);
         free(c->text);
         free(c->contig);
@@ -326,12 +312,7 @@ void mafAliFree(struct mafAli **pAli) {
     a = *pAli;
     mafCompsFree(a->components);
     a->components = NULL;
-    /*
-    for (c = a->components; c != NULL; c = next) {
-      next = c->next;
-      mafCompFree(&c);
-    }
-    */
+
     free(a);
     *pAli = NULL;
 }

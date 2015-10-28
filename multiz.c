@@ -1,7 +1,7 @@
 /* multiz.c   version 11.2
  *
- * Change argument row2 to all, make it default not to output
- * single-row blocks. -- 10/06/05
+ * Change argument row2 to all, make it default not to output single-row blocks. -- 10/06/05
+ *
  * Add option not to output single-row blocks. -- 09/28/05
  *
  * most recent modification: previously not to break some large
@@ -19,8 +19,7 @@
 *  blocks are output to out1 and out2, if not specified,
 *  unused blocks are output to stdout.
 *
-*  Modified on Aug. 31 to fix the bug where blocks might
-*  be lost when column width is below a certain value.
+*  Modified on Aug. 31 to fix the bug where blocks might be lost when column width is below a certain value.
 *
 *  Modified on Aug. 31 to allow for arguments of R and M.
 *
@@ -96,24 +95,6 @@ int multiz(struct mafAli **wk_list1, struct mafAli **wk_list2, FILE *fpw1, FILE 
         beg2 = a2->components->start;                           // pre_yama middle/covered part,
         end2 = a2->components->start + a2->components->size - 1;// then add another ali to process end part
 
-        /* // the unused positions overlap with the unbroken part
-        if ( beg1 > beg2 && end1 < end2 && end2-beg2+1 > LRG_BREAK_WID && end1-beg1 + 1 < SML_BREAK_WID) { // not to break a2
-          if ( a1->components->size >= MIN_OUTPUT_WID && fpw1 != NULL )
-        mafWrite(fpw1, a1);
-          mafAliFree(&a1);
-          a1 = retrieve_first(wk_list1);
-          continue;
-        }
-
-        if ( beg2 > beg1 && end2 < end1 && end1-beg1+1 > LRG_BREAK_WID && end2-beg2 + 1 < SML_BREAK_WID) { // not to break a1
-          if ( a2->components->size >= MIN_OUTPUT_WID && fpw2 !=NULL)
-            mafWrite(fpw2, a2);
-          mafAliFree(&a2);
-          a2 = retrieve_first(wk_list2);
-          continue;
-        }
-        */
-
         if (beg1 < beg2 && beg2 - beg1 >= MIN_OUTPUT_WID && fpw1 != NULL) {
             col_beg = mafPos2Col(a1->components, beg1, a1->textSize);
             for (; col_beg > 0 && a1->components->text[col_beg - 1] == '-'; col_beg--);
@@ -127,7 +108,6 @@ int multiz(struct mafAli **wk_list1, struct mafAli **wk_list2, FILE *fpw1, FILE 
             for (; col_end < a2->textSize - 1 && a2->components->text[col_end + 1] == '-'; col_end++);
             print_part_ali_col(a2, col_beg, col_end, fpw2);
         }
-
 
         beg = beg1 > beg2 ? beg1 : beg2;
         end = end1 < end2 ? end1 : end2;

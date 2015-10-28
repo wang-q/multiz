@@ -7,12 +7,6 @@
  */
 #include "maf.h"
 
-struct str_node {
-    char* str;
-    struct str_node* next;
-};
-
-
 // keep alignment starting from position beg on reference
 struct mafAli* keep_ali(struct mafAli* ali, int beg);
 

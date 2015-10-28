@@ -3,8 +3,6 @@
 
 #include "maf.h"
 
-typedef int ss_t[128][128];
-
 int	**ss, // 128x128 array of substitution scores
 *gop; // 16-position array of quasi-natural gap-open penalties
 
