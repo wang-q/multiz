@@ -83,15 +83,11 @@ struct mafAli* mafColDashRm(struct mafAli *a);
 /* remove columns which contain all dashes. */
 
 struct mafAli* mafRowDashRm(struct mafAli *a);
-/* remove components which contain all dashes. */
 
-struct mafComp *mafNewComp(char *src, int start, int size, char strand, int srcSize, int len, char paralog, char* name, char* contig);
 /* construct a new component. */
 
 struct mafAli* make_part_ali(struct mafAli* template, int cbeg, int cend);
 
 struct mafComp *mafCpyComp(struct mafComp*);
-struct mafAli *mafNewAli(double score, int textSize);
-struct mafAli* duplicate_ali(struct mafAli* template);
 
 #endif

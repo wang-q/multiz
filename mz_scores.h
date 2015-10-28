@@ -15,7 +15,7 @@ int gap_open, gap_extend;
 #define GAP2(s,t,u,v) GAP((s == '-'), (t == '-'), (u == '-'), (v == '-'))
 
 void init_scores70();
-void init_scores85();
+
 double mafScoreRange(struct mafAli *maf, int start, int size);
 
 #endif

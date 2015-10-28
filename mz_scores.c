@@ -109,21 +109,6 @@ void init_scores70() {
     gap_extend = GAP_EXTEND70;
 }
 
-void init_scores85() {
-    static int init = 1;
-
-    if (init) {
-        init = 0;
-        ss85 = alloc_scores(&gop85);
-        init_scores(HOX85, ss85, gop85, UNSPECIFIED, GAP_OPEN85,
-                    GAP_EXTEND85);
-    }
-    ss = ss85;
-    gop = gop85;
-    gap_open = GAP_OPEN85;
-    gap_extend = GAP_EXTEND85;
-}
-
 double mafScoreRange(struct mafAli *maf, int start, int size) {
     uchar ai, ar, bi, br;
     int i;

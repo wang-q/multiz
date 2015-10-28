@@ -15,8 +15,6 @@ set(SOURCE_FILES
         mz_preyama.c
         mz_scores.h
         mz_scores.c
-        seq.h
-        seq.c
         charvec.h
         charvec.c
         mz_yama.h

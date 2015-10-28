@@ -24,7 +24,4 @@
 
 struct mafAli *pre_yama(struct mafAli *a1, struct mafAli *a2, int beg, int end, int radius, int reference, FILE* fpw2);
 
-struct mafAli* pre_yama2(struct mafAli* a1, struct mafAli* a2, struct mafAli* a3, int beg1, int end1, int begN, int endN, int radius, struct pwuAliFiles* pws);
-
-
 #endif

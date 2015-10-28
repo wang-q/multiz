@@ -419,23 +419,6 @@ struct mafAli* mafRowDashRm(struct mafAli *ali) {
     return ali;
 }
 
-struct mafComp *mafNewComp(char *src, int start, int size, char strand, int srcSize, int len, char paralog, char *name, char* contig) {
-    struct mafComp *c = ckalloc(sizeof(struct mafComp));
-
-    c->src = copy_string(src);
-    c->name = copy_string(name);
-    c->contig = copy_string(contig);
-    c->start = start;
-    c->size = size;
-    c->strand = strand;
-    c->srcSize = srcSize;
-    c->text = ckalloc((len+1)*sizeof(char));
-    c->paralog = paralog;
-    c->mafPosMap = NULL;
-    c->next = NULL;
-    return c;
-}
-
 
 struct mafComp* mafCpyComp(struct mafComp* t) {
     struct mafComp* c = ckalloc(sizeof(struct mafComp));
@@ -451,41 +434,6 @@ struct mafComp* mafCpyComp(struct mafComp* t) {
     c->next = NULL;
     c->mafPosMap = NULL;
     return c;
-}
-
-struct mafAli* mafNewAli(double score, int textSize) {
-    struct mafAli *a = ckalloc(sizeof(struct mafAli));
-
-    a->components = NULL;
-    a->next = NULL;
-    a->score = score;
-    a->textSize = textSize;
-    return a;
-}
-
-struct mafAli* duplicate_ali(struct mafAli* template) {
-    struct mafAli* newAli;
-    struct mafComp *ncomp, *tcomp, *pcomp;
-
-    newAli = (struct mafAli*)malloc(sizeof(struct mafAli));
-    newAli->components = NULL;
-
-    for ( tcomp = template->components; tcomp != NULL; tcomp = tcomp->next) {
-        ncomp = mafCpyComp(tcomp);
-        ncomp->text = copy_string(tcomp->text);
-
-        if ( newAli->components == NULL )
-            newAli->components = ncomp;
-        else {
-            for (pcomp = newAli->components; pcomp->next != NULL; pcomp=pcomp->next)
-                ;
-            pcomp->next = ncomp;
-        }
-    }
-    newAli->next = NULL;
-    newAli->textSize = template->textSize;
-    newAli->score = template->score;
-    return newAli;
 }
 
 struct mafAli* make_part_ali(struct mafAli* template, int cbeg, int cend) {

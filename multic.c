@@ -245,7 +245,6 @@ static void print_unused_ali_multic(struct aliNode* aliN, FILE* fpw) {
             j++;
         j--; // next is >0 or j is at last pos
         nali = make_part_ali(ali, i, j);
-        //if ( rm_repeated_block(&root, nali) != 1 )
         if ( nali!=NULL) {
             mafWrite(fpw, nali);
             mafAliFree(&nali);
