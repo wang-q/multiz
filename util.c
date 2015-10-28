@@ -8,7 +8,7 @@ void print_argv0(void) {
     if (argv0) {
 
         char *p = strrchr(argv0, '/');
-        (void)fprintf(stderr, "%s: ", p ? p+1 : argv0);
+        (void) fprintf(stderr, "%s: ", p ? p + 1 : argv0);
     }
 }
 
@@ -23,8 +23,8 @@ void fatalf(const char *fmt, ...) {
     va_start(ap, fmt);
     fflush(stdout);
     print_argv0();
-    (void)vfprintf(stderr, fmt, ap);
-    (void)fputc('\n', stderr);
+    (void) vfprintf(stderr, fmt, ap);
+    (void) fputc('\n', stderr);
     va_end(ap);
     exit(1);
 }
@@ -41,21 +41,21 @@ FILE *ckopen(const char *name, const char *mode) {
 void *ckalloc(size_t amount) {
     void *p;
 
-    if ((long)amount < 0) {                                  /* was "<= 0" -CR */
+    if ((long) amount < 0) {                                  /* was "<= 0" -CR */
         fatal("ckalloc: request for negative space.");
     }
     if (amount == 0)
         amount = 1; /* ANSI portability hack */
     if ((p = malloc(amount)) == NULL)
         fatalf("Ran out of memory trying to allocate %lu.",
-               (unsigned long)amount);
+               (unsigned long) amount);
     return p;
 }
 
 
 /* copy_string ---------------------- save string s somewhere; return address */
 char *copy_string(const char *s) {
-    char *p = ckalloc(strlen(s)+1);    /* +1 to hold '\0' */
+    char *p = ckalloc(strlen(s) + 1);    /* +1 to hold '\0' */
     return strcpy(p, s);
     //strcpy(p, s);
     //return p;
@@ -68,8 +68,8 @@ void fatalfr(const char *fmt, ...) {
 
     fflush(stdout);
     print_argv0();
-    (void)vfprintf(stderr, fmt, ap);
-    (void)fprintf(stderr, ": %s\n", strerror(errno));
+    (void) vfprintf(stderr, fmt, ap);
+    (void) fprintf(stderr, ": %s\n", strerror(errno));
     va_end(ap);
     exit(1);
 }

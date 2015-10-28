@@ -16,14 +16,14 @@ struct mafFile *mafOpen(char *fileName, int verbose) {
     mf->next = NULL;
     fp = mf->fp = ckopen(fileName, "r");
     if (fgets(buf, 500, fp) == NULL) {
-        if ( ferror(fp) )
+        if (ferror(fp))
             fprintf(stderr, "error file reading\n");
         fatalf("empty file %s", fileName);
     }
     if (sscanf(buf, "##maf version=%d", &(mf->version)) != 1)
         fatalf("improper maf header line: %s", buf);
     if ((s = strstr(buf, "scoring=")) != NULL)
-        mf->scoring = copy_string(s+8);
+        mf->scoring = copy_string(s + 8);
     else
         mf->scoring = NULL;
     mf->alignments = NULL;
@@ -52,13 +52,13 @@ unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
     unsigned long n = 0;
 
     while ((ch = fgetc(fp)) != -1) {
-        if (need(n+1, linep, np))
+        if (need(n + 1, linep, np))
             return -1;
         (*linep)[n++] = ch;
         if (ch == '\n')
             break;
     }
-    if (need(n+1, linep, np))
+    if (need(n + 1, linep, np))
         return -1;
     (*linep)[n] = 0;
     if (n == 0 && ch == -1)
@@ -72,8 +72,8 @@ unsigned long get_maf_line(char **linep, unsigned long *np, FILE *fp,
 
     while ((nn = get_line(linep, np, fp)) > 1) {
         mf->line_nbr++;
-        if  ((*linep)[0] == '#') {
-            if (mf->verbose && strstr(*linep, "eof")==NULL)
+        if ((*linep)[0] == '#') {
+            if (mf->verbose && strstr(*linep, "eof") == NULL)
                 printf("%s", *linep);
         } else
             break;
@@ -82,35 +82,35 @@ unsigned long get_maf_line(char **linep, unsigned long *np, FILE *fp,
 }
 
 // parse line "a ..." to get score
-int parseScoreLine(char* line, struct mafAli* ali) {
-    char *ptr1=line+1, *ptr2, *buffer=NULL;
-    int len, row, curr=0;
-    struct mafComp* comp=ali->components;
+int parseScoreLine(char *line, struct mafAli *ali) {
+    char *ptr1 = line + 1, *ptr2, *buffer = NULL;
+    int len, row, curr = 0;
+    struct mafComp *comp = ali->components;
 
-    ali->score = (double)MIN_INT;
-    while ( *ptr1 != '\0') {
-        while ( *ptr1 == ' '  || *ptr1 == '\t')
+    ali->score = (double) MIN_INT;
+    while (*ptr1 != '\0') {
+        while (*ptr1 == ' ' || *ptr1 == '\t')
             ptr1++;
-        if ( *ptr1 == '\n' || *ptr1 == '\0')
+        if (*ptr1 == '\n' || *ptr1 == '\0')
             break;
         ptr2 = ptr1;
-        while ( *ptr2 != ' ' && *ptr2 != '\t' && *ptr2 != '\n' && *ptr2 != '\0')
+        while (*ptr2 != ' ' && *ptr2 != '\t' && *ptr2 != '\n' && *ptr2 != '\0')
             ptr2++;
         len = ptr2 - ptr1;
-        buffer = (char*)malloc((len+1)*sizeof(char));
+        buffer = (char *) malloc((len + 1) * sizeof(char));
         strncpy(buffer, ptr1, len);
         buffer[len] = '\0';
-        if ( strncmp(buffer, "score=", 6) == 0 )
-            ali->score = atof(buffer+6);
-        else if ( strncmp(buffer, "amplifier=", 10) == 0 ) {
-            row = atoi(buffer+10);
-            while (curr < row ) {
+        if (strncmp(buffer, "score=", 6) == 0)
+            ali->score = atof(buffer + 6);
+        else if (strncmp(buffer, "amplifier=", 10) == 0) {
+            row = atoi(buffer + 10);
+            while (curr < row) {
                 comp = comp->next;
                 curr++;
             }
             comp->paralog = 'a';
-        } else if ( strncmp(buffer, "copy=", 5) == 0) {
-            row = atoi(buffer+5);
+        } else if (strncmp(buffer, "copy=", 5) == 0) {
+            row = atoi(buffer + 5);
             while (curr < row) {
                 comp = comp->next;
                 curr++;
@@ -119,7 +119,7 @@ int parseScoreLine(char* line, struct mafAli* ali) {
         }
         free(buffer);
         buffer = NULL;
-        ptr1 = ptr2+1;
+        ptr1 = ptr2 + 1;
     }
     return 0;
 }
@@ -134,8 +134,8 @@ struct mafAli *mafNext(struct mafFile *mf) {
     static unsigned long nb = 0;
     int i, len;
 
-    while ((len=get_maf_line(&line, &nb, fp, mf)) != -1)
-        if ( line[0] != '#' && line[0] != '\n' && line[0] != ' ')
+    while ((len = get_maf_line(&line, &nb, fp, mf)) != -1)
+        if (line[0] != '#' && line[0] != '\n' && line[0] != ' ')
             break;
     if (len == -1) {
         fclose(fp);
@@ -143,7 +143,7 @@ struct mafAli *mafNext(struct mafFile *mf) {
         return NULL;
     }
 
-    if ( strncmp(line, "a", 1) == 0)
+    if (strncmp(line, "a", 1) == 0)
         strcpy(blockHeaderLine, line);
     else
         fatalf("Expecting 'a (score=xxx)' in file %s, line %d:\n%s",
@@ -152,11 +152,11 @@ struct mafAli *mafNext(struct mafFile *mf) {
     last = a->components = NULL;
     a->next = NULL;
     while ((len = get_maf_line(&line, &nb, fp, mf)) != -1 &&
-            line[0] != '\n' && line[0] != ' ' && line[0] != '#') {
+           line[0] != '\n' && line[0] != ' ' && line[0] != '#') {
         c = ckalloc(sizeof(struct mafComp));
 
-        c->text = ckalloc(len*sizeof(char));
-        if ( line[0] != 's' )
+        c->text = ckalloc(len * sizeof(char));
+        if (line[0] != 's')
             continue;
         if (sscanf(line, "s %s %d %d %c %d %s",
                    buf, &(c->start), &(c->size), &(c->strand),
@@ -173,7 +173,7 @@ struct mafAli *mafNext(struct mafFile *mf) {
             a->textSize = strlen(c->text);
             a->components = c;
         } else {
-            if (a->textSize != (signed)strlen(c->text))
+            if (a->textSize != (signed) strlen(c->text))
                 fatalf("line %d of %s: inconsistent row size",
                        mf->line_nbr, mf->fileName);
             last->next = c;
@@ -197,7 +197,8 @@ struct mafAli *mafNext(struct mafFile *mf) {
             if (c->text[i] != '-')
                 ++len;
         if (len != c->size)
-            fatalf("Actual size %d, claimed size %d at line %d of file %s:\n%s", len, c->size, mf->line_nbr, mf->fileName, line);
+            fatalf("Actual size %d, claimed size %d at line %d of file %s:\n%s", len, c->size, mf->line_nbr,
+                   mf->fileName, line);
 
     }
     parseScoreLine(blockHeaderLine, a);
@@ -231,8 +232,7 @@ int digitsBaseTen(int x) {
 
     if (x < 0)
         fatalf("digitsBaseTen: negative argument %d", x);
-    for (digCount = 1; x >= 10; x /= 10, ++digCount)
-        ;
+    for (digCount = 1; x >= 10; x /= 10, ++digCount);
     return digCount;
 }
 
@@ -242,35 +242,35 @@ void mafWrite(FILE *f, struct mafAli *a) {
     char src[500], name[200], chr[200];
 
     fprintf(f, "a");
-    if ( a->score != MIN_INT )
+    if (a->score != MIN_INT)
         fprintf(f, " score=%3.1f", a->score);
     for (row = 0, c = a->components; c != NULL; c = c->next, row++) {
-        switch ( c->paralog ) {
-        case 's':
-            break;
-        case 'a':
-            fprintf(f, " amplifier=%d", row);
-            break;
-        case 'c':
-            fprintf(f, " copy=%d", row);
-            break;
-        default:
-            fatalf("Wrong character: \'%c\'", c->paralog);
+        switch (c->paralog) {
+            case 's':
+                break;
+            case 'a':
+                fprintf(f, " amplifier=%d", row);
+                break;
+            case 'c':
+                fprintf(f, " copy=%d", row);
+                break;
+            default:
+                fatalf("Wrong character: \'%c\'", c->paralog);
         }
     }
     fprintf(f, "\n");
 
     /* Figure out length of each field. */
     for (c = a->components; c != NULL; c = c->next) {
-        srcChars = MAX(srcChars, (signed int)strlen(c->src));
+        srcChars = MAX(srcChars, (signed int) strlen(c->src));
         startChars = MAX(startChars, digitsBaseTen(c->start));
-        sizeChars = MAX(sizeChars,digitsBaseTen(c->size));
+        sizeChars = MAX(sizeChars, digitsBaseTen(c->size));
         srcSizeChars = MAX(srcSizeChars, digitsBaseTen(c->srcSize));
     }
     for (c = a->components; c != NULL; c = c->next) {
         parseSrcName(c->src, name, chr);
         strcpy(src, name);
-        if ( strcmp( name, chr) != 0) {
+        if (strcmp(name, chr) != 0) {
             strcat(src, ".");
             strcat(src, chr);
         }
@@ -278,7 +278,7 @@ void mafWrite(FILE *f, struct mafAli *a) {
                 srcChars, src, startChars, c->start, sizeChars, c->size,
                 c->strand, srcSizeChars, c->srcSize, c->text);
     }
-    fprintf(f, "\n");	// blank separator line
+    fprintf(f, "\n");    // blank separator line
 }
 
 void mafCompFree(struct mafComp **pComp) {
@@ -289,15 +289,15 @@ void mafCompFree(struct mafComp **pComp) {
         free(c->text);
         free(c->contig);
         free(c->name);
-        if ( c->mafPosMap != NULL )
+        if (c->mafPosMap != NULL)
             free(c->mafPosMap);
         free(c);
         *pComp = NULL;
     }
 }
 
-void mafCompsFree(struct mafComp* pComp) {
-    struct mafComp* c, *next;
+void mafCompsFree(struct mafComp *pComp) {
+    struct mafComp *c, *next;
     for (c = pComp; c != NULL; c = next) {
         next = c->next;
         mafCompFree(&c);
@@ -307,7 +307,7 @@ void mafCompsFree(struct mafComp* pComp) {
 void mafAliFree(struct mafAli **pAli) {
     struct mafAli *a;
 
-    if ( pAli == NULL || *pAli == NULL)
+    if (pAli == NULL || *pAli == NULL)
         return;
     a = *pAli;
     mafCompsFree(a->components);
@@ -321,7 +321,7 @@ void mafFileFree(struct mafFile **pmf) {
     struct mafFile *mf = *pmf;
     struct mafAli *a, *next;
 
-    if (mf->fp != NULL && strcmp(mf->fileName, "/dev/stdin") != 0 )
+    if (mf->fp != NULL && strcmp(mf->fileName, "/dev/stdin") != 0)
         fclose(mf->fp);
     if (mf->scoring != NULL)
         free(mf->scoring);
@@ -335,11 +335,11 @@ void mafFileFree(struct mafFile **pmf) {
 }
 
 // rm columns which contain all dashes.
-struct mafAli* mafColDashRm(struct mafAli *a) {
+struct mafAli *mafColDashRm(struct mafAli *a) {
     int i, col;
     struct mafComp *c;
 
-    if (a==NULL)
+    if (a == NULL)
         return NULL;
 
     for (i = col = 0; col < a->textSize; ++col) {
@@ -362,8 +362,8 @@ struct mafAli* mafColDashRm(struct mafAli *a) {
 }
 
 
-struct mafComp* mafCpyComp(struct mafComp* t) {
-    struct mafComp* c = ckalloc(sizeof(struct mafComp));
+struct mafComp *mafCpyComp(struct mafComp *t) {
+    struct mafComp *c = ckalloc(sizeof(struct mafComp));
 
     c->src = copy_string(t->src);
     c->name = copy_string(t->name);

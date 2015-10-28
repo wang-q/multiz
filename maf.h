@@ -9,9 +9,8 @@
 #define MAX_INT ((int)(~(1<<(sizeof(int)*8-1))))
 #define MIN_INT ((int)(1<<(sizeof(int)*8-1)))
 
-struct mafFile
-    /* A file full of multiple alignments. */
-{
+/* A file full of multiple alignments. */
+struct mafFile {
     struct mafFile *next;
     int version;        // Required
     char *scoring;        // Name of scoring scheme.
@@ -26,9 +25,8 @@ void mafFileFree(struct mafFile **pObj);
 
 /* Free up a maf file including closing file handle if necessary. */
 
-struct mafAli
-    /* A multiple alignment. */
-{
+/* A multiple alignment. */
+struct mafAli {
     struct mafAli *next;
     double score;
     struct mafComp *components;
@@ -42,9 +40,8 @@ void mafAliFree(struct mafAli **pObj);
 
 /* Free up a maf alignment. */
 
-struct mafComp
-    /* A component of a multiple alignment. */
-{
+/* A component of a multiple alignment. */
+struct mafComp {
     struct mafComp *next;
     char *name;
     /* comman name of sequence source. */

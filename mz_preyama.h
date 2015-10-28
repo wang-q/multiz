@@ -21,6 +21,6 @@
  *     1:  the first block is fixed
  */
 
-struct mafAli *pre_yama(struct mafAli *a1, struct mafAli *a2, int beg, int end, int radius, int reference, FILE* fpw2);
+struct mafAli *pre_yama(struct mafAli *a1, struct mafAli *a2, int beg, int end, int radius, int reference, FILE *fpw2);
 
 #endif

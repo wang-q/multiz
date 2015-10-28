@@ -32,7 +32,7 @@ typedef struct DP {
     int D, C, I;
     int unused;       /* padding for efficiency with linux/GCC */
 }
-dp_node;
+        dp_node;
 
 // populate a column from a column of height K and a column of height L
 static void new_col(uchar *from1, int K, uchar *from2, int L, uchar *to_col) {
@@ -41,15 +41,15 @@ static void new_col(uchar *from1, int K, uchar *from2, int L, uchar *to_col) {
     for (i = 0; i < K; ++i)
         to_col[i] = from1[i];
     for (i = 0; i < L; ++i)
-        to_col[i+K] = from2[i];
+        to_col[i + K] = from2[i];
 }
 
 void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
           uchar ***OAL, int *OM) {
     int C, D, I, i, j, k, m, m_new, n, row, col, s, t, u, v, x, y, z,
-    diag_c, diag_d, diag_i, tback_size, nedit;
+            diag_c, diag_d, diag_i, tback_size, nedit;
     uchar **tback_row, *tback, *tbp, st, flag_d, flag_i, flag_c, node,
-    *dashes, *script, **al_new;
+            *dashes, *script, **al_new;
     dp_node *dp;
 
     if (LB[0] != 0 || RB[M] != N)
@@ -57,26 +57,26 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
     for (tback_size = row = 0; row <= M; row++) {
         j = RB[row] - LB[row];
         // temporary sanity check:
-        if (j < MIN(N,10)) {
-            fatalf("RB[%d] - LB[%d] < %d, %d %d %d", row, row, MIN(N,10), RB[row], LB[row], N);
+        if (j < MIN(N, 10)) {
+            fatalf("RB[%d] - LB[%d] < %d, %d %d %d", row, row, MIN(N, 10), RB[row], LB[row], N);
         }
-        tback_size += (j+1);
-        if (row > 0 && LB[row] < LB[row-1])
+        tback_size += (j + 1);
+        if (row > 0 && LB[row] < LB[row - 1])
             fatal("LB not monotonic");
-        if (row > 0 && RB[row] < RB[row-1])
+        if (row > 0 && RB[row] < RB[row - 1])
             fatal("RB not monotonic");
     }
 
-    dashes = ckalloc(MAX(K,L)*sizeof(uchar));
-    for (i = 0; i < MAX(K,L); ++i)
+    dashes = ckalloc(MAX(K, L) * sizeof(uchar));
+    for (i = 0; i < MAX(K, L); ++i)
         dashes[i] = '-';
 
     tback = ckalloc(tback_size * sizeof(uchar));
-    tback_row = ckalloc((M+1)*sizeof(uchar *));
+    tback_row = ckalloc((M + 1) * sizeof(uchar *));
     tbp = tback_row[0] = tback;
-    *(tbp++) = 0;	/* unused */
+    *(tbp++) = 0;    /* unused */
 
-    dp = ckalloc((N+1)*sizeof(dp_node));
+    dp = ckalloc((N + 1) * sizeof(dp_node));
     dp[0].C = dp[0].D = dp[0].I = 0;
     flag_i = FLAG_I;
     for (col = 1; col <= RB[0]; ++col) {
@@ -84,10 +84,10 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
         for (j = n = 0; j < L; ++j)
             if (B[col][j] != '-')
                 ++n;
-        dp[col].I = dp[col-1].I - n*K*gap_extend;
+        dp[col].I = dp[col - 1].I - n * K * gap_extend;
         *(tbp++) = (flag_i << 4);
     }
-    for ( ; col <= N; ++col)
+    for (; col <= N; ++col)
         dp[col].C = dp[col].D = dp[col].I = MININT;
 
     C = D = I = MININT;
@@ -95,7 +95,7 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
         tback_row[row] = tbp - LB[row];
 
         col = LB[row] - 1;
-        if (LB[row-1] <= col) {
+        if (LB[row - 1] <= col) {
             diag_c = dp[col].C;
             diag_d = dp[col].D;
             diag_i = dp[col].I;
@@ -117,19 +117,19 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
                 *  of the last two edges in a path, i.e., on
                 *  the types of the last two nodes.
                 */
-                if (row < M)	// not for end-gaps
+                if (row < M)    // not for end-gaps
                     for (i = 0; i < K; ++i) {
                         s = (A[row][i] == '-');
                         u = 1;
                         for (j = 0; j < L; ++j) {
                             t = (col > 1 &&
-                                 B[col-1][j] == '-');
+                                 B[col - 1][j] == '-');
                             v = (B[col][j] == '-');
-                            if (col > LB[row-1]+1)
-                                x -= GAP(s,t,u,v);
-                            y -= GAP(s,1,u,v);
-                            if (col > LB[row]+1)
-                                z -= GAP(1,t,u,v);
+                            if (col > LB[row - 1] + 1)
+                                x -= GAP(s, t, u, v);
+                            y -= GAP(s, 1, u, v);
+                            if (col > LB[row] + 1)
+                                z -= GAP(1, t, u, v);
                         }
                     }
                 if (x >= y && x >= z) {
@@ -154,32 +154,32 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
                 for (j = n = 0; j < L; ++j)
                     if (B[col][j] != '-')
                         ++n;
-                I -= n*K*gap_extend;
+                I -= n * K * gap_extend;
 
             } else {
                 I = MININT;
-                flag_i = 0;	// unused
+                flag_i = 0;    // unused
             }
 
             // compute C and flag_c
-            if (col > LB[row-1]) {
+            if (col > LB[row - 1]) {
                 x = diag_c;
                 y = diag_d;
                 z = diag_i;
-                if (col > 1)	// no gap-open penalty at start
+                if (col > 1)    // no gap-open penalty at start
                     for (i = 0; i < K; ++i) {
-                        s = (row > 1 && A[row-1][i] == '-');
+                        s = (row > 1 && A[row - 1][i] == '-');
                         u = (A[row][i] == '-');
                         for (j = 0; j < L; ++j) {
-                            t = (B[col-1][j] == '-');
+                            t = (B[col - 1][j] == '-');
                             v = (B[col][j] == '-');
                             if (row > 1 &&
-                                    col > LB[row-2] + 1)
-                                x -= GAP(s,t,u,v);
+                                col > LB[row - 2] + 1)
+                                x -= GAP(s, t, u, v);
                             if (row > 1)
-                                y -= GAP(s,1,u,v);
-                            if (col > LB[row-1] + 1)
-                                z -= GAP(1,t,u,v);
+                                y -= GAP(s, 1, u, v);
+                            if (col > LB[row - 1] + 1)
+                                z -= GAP(1, t, u, v);
                         }
                     }
                 if (x >= y && x >= z) {
@@ -194,7 +194,7 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
                 }
                 for (i = 0; i < K; ++i)
                     for (j = 0; j < L; ++j)
-                        C += SS(A[row][i],B[col][j]);
+                        C += SS(A[row][i], B[col][j]);
             } else {
                 C = MININT;
                 flag_c = 0;
@@ -204,19 +204,19 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
             x = dp[col].C;
             y = dp[col].D;
             z = dp[col].I;
-            if (0 < col && col < N)	// not for end-gaps
+            if (0 < col && col < N)    // not for end-gaps
                 for (i = 0; i < K; ++i) {
-                    s = (row > 1 && A[row-1][i] == '-');
+                    s = (row > 1 && A[row - 1][i] == '-');
                     u = (A[row][i] == '-');
                     v = 1;
                     for (j = 0; j < L; ++j) {
                         t = B[col][j] == '-';
-                        if (row > 1 && col > LB[row-2])
-                            x -= GAP(s,t,u,v);
+                        if (row > 1 && col > LB[row - 2])
+                            x -= GAP(s, t, u, v);
                         if (row > 1)
-                            y -= GAP(s,1,u,v);
-                        if (col > LB[row-1])
-                            z -= GAP(1,t,u,v);
+                            y -= GAP(s, 1, u, v);
+                        if (col > LB[row - 1])
+                            z -= GAP(1, t, u, v);
                     }
                 }
             if (x >= y && x >= z) {
@@ -235,7 +235,7 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
             for (j = n = 0; j < K; ++j)
                 if (A[row][j] != '-')
                     ++n;
-            D -= n*L*gap_extend;
+            D -= n * L * gap_extend;
 
             // complete processing of the grid point (row,col)
             diag_c = dp[col].C;
@@ -246,11 +246,11 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
             dp[col].I = I;
 
             // pack three flags into one byte of traceback memory
-            *(tbp++) = flag_c | (flag_d<<2) | (flag_i << 4);
+            *(tbp++) = flag_c | (flag_d << 2) | (flag_i << 4);
         }
     }
 
-    script = ckalloc((M+N)*sizeof(uchar));
+    script = ckalloc((M + N) * sizeof(uchar));
     nedit = 0;
     // start with best node at grid point (M,N)
     row = M;
@@ -270,14 +270,14 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
         if (row < 0 || col < 0) {
             fatal("Error generating edit script.");
         }
-        st = tback_row[row][col];	// three flags in one byte
+        st = tback_row[row][col];    // three flags in one byte
         script[nedit++] = node;
         if (node == FLAG_I) {
             col--;
-            node = (st>>4);
+            node = (st >> 4);
         } else if (node == FLAG_D) {
             row--;
-            node = (st>>2) & SELECT_CID;
+            node = (st >> 2) & SELECT_CID;
         } else if (node == FLAG_C) {
             row--;
             col--;
@@ -287,10 +287,10 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
     }
 
     *OM = m_new = nedit;
-    al_new = (uchar **)ckalloc(m_new*sizeof(uchar *)) - 1;
-    al_new[1] = (uchar *)ckalloc(m_new*(K+L)*sizeof(uchar));
+    al_new = (uchar **) ckalloc(m_new * sizeof(uchar *)) - 1;
+    al_new[1] = (uchar *) ckalloc(m_new * (K + L) * sizeof(uchar));
     for (i = 2; i <= m_new; ++i)
-        al_new[i] = al_new[i-1] + (K+L);
+        al_new[i] = al_new[i - 1] + (K + L);
 
     i = j = m = 0;
     while (--nedit >= 0) {
@@ -303,7 +303,7 @@ void yama(uchar **A, int K, int M, uchar **B, int L, int N, int *LB, int *RB,
         else
             fatalf("Illegal edit op: %d", k);
     }
-    if (i != M || j != N || m  != m_new)
+    if (i != M || j != N || m != m_new)
         fatalf("new_align: i=%d, j=%d, m=%d, M=%d, N=%d, M_new=%d\n",
                i, j, j, M, N, m_new);
     *OAL = al_new;

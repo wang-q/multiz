@@ -17,15 +17,21 @@ typedef unsigned char uchar;
 extern char *argv0;
 
 void print_argv0(void);
+
 #ifdef __GNUC__     /* avoid some "foo might be used uninitialized" warnings */
+
 void fatal(const char *msg) __attribute__ ((noreturn));
+
 void fatalf(const char *fmt, ...) __attribute__ ((noreturn));
+
 void fatalfr(const char *fmt, ...) __attribute__ ((noreturn));
+
 #else
 void fatal(const char *msg);
 void fatalf(const char *fmt, ...);
 void fatalfr(const char *fmt, ...);
 #endif
+
 FILE *ckopen(const char *name, const char *mode);
 
 void *ckalloc(size_t amount);

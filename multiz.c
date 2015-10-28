@@ -89,7 +89,6 @@ int multiz(struct mafAli **wk_list1, struct mafAli **wk_list2, FILE *fpw1, FILE 
         if (a1->components->start == 11305)
             test++;
 
-
         beg1 = a1->components->start;                           // at this point, a1 a2 overlap or
         end1 = a1->components->start + a1->components->size - 1;// cover, print uncovered front part
         beg2 = a2->components->start;                           // pre_yama middle/covered part,
