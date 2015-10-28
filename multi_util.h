@@ -12,10 +12,6 @@ struct str_node {
     struct str_node* next;
 };
 
-void do_revcompl(char *s, int len);
-void rev_comp(struct mafComp* c, int textSize);
-void rc(struct mafAli *a);
-
 
 // keep alignment starting from position beg on reference
 struct mafAli* keep_ali(struct mafAli* ali, int beg);
@@ -37,12 +33,7 @@ int mafPos2Col(struct mafComp *c, int pos, int textSize);
 struct mafAli* retrieve_first(struct mafAli** head);
 void seperate_cp_wk(struct mafAli** cp_list, struct mafAli** wk_list, char* chr);
 
-int colPos2Maf_after(struct mafComp* comp, int col);
-int colPos2Maf_before(struct mafComp* comp, int col);
-
 void parseSrcName(char* srcName, char* name, char* src);
 void parseSrcName2(struct mafComp*);
-
-int overlap(int beg1, int end1, int beg2, int end2);
 
 #endif

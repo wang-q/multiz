@@ -8,9 +8,6 @@
 #include "multi_util.h"
 #include "mz_scores.h"
 
-static const char rcsid[] = "$Id: maf.c 142 2008-11-12 18:55:23Z rico $";
-
-
 struct mafFile *mafOpen(char *fileName, int verbose) {
     struct mafFile *mf;
     FILE *fp;
@@ -383,42 +380,6 @@ struct mafAli* mafColDashRm(struct mafAli *a) {
     return a;
 }
 
-// rm components which contain all dashes
-struct mafAli* mafRowDashRm(struct mafAli *ali) {
-    struct mafComp* comp, *prev;
-    char* s;
-
-    if ( ali==NULL)
-        return NULL;
-    for (comp=prev=ali->components; comp != NULL;) {
-        for (s=comp->text; *s != '\0'; s++)
-            if ( *s != '-' )
-                break;
-        if ( *s == '\0' ) { // delete this comp
-            if ( comp == ali->components ) {
-                ali->components = comp->next;
-                comp->next = NULL;
-                mafCompFree(&comp);
-                comp = prev = ali->components;
-            } else {
-                prev->next = comp->next;
-                comp->next = NULL;
-                mafCompFree(&comp);
-                comp = prev->next;
-            }
-            continue;
-        }
-        prev = comp;
-        comp = comp->next;
-    }
-
-    if ( ali->components == NULL) {
-        mafAliFree(&ali);
-        return NULL;
-    }
-    return ali;
-}
-
 
 struct mafComp* mafCpyComp(struct mafComp* t) {
     struct mafComp* c = ckalloc(sizeof(struct mafComp));
@@ -436,39 +397,3 @@ struct mafComp* mafCpyComp(struct mafComp* t) {
     return c;
 }
 
-struct mafAli* make_part_ali(struct mafAli* template, int cbeg, int cend) {
-    struct mafAli* retAli;
-    struct mafComp *ncomp, *tcomp, *pcomp;
-    int i;
-
-    retAli = (struct mafAli*)malloc(sizeof(struct mafAli));
-    retAli->components = NULL;
-
-    for ( tcomp=template->components; tcomp!=NULL; tcomp=tcomp->next) {
-        ncomp = mafCpyComp(tcomp);
-        ncomp->text = (char*)malloc( (cend-cbeg+2)*sizeof(char));
-        for (i=cbeg; i<=cend; i++)
-            ncomp->text[i-cbeg] = tcomp->text[i];
-        ncomp->text[cend-cbeg+1] = '\0';
-        for (i=0, ncomp->start=tcomp->start-1; i<cbeg; i++)
-            if (tcomp->text[i] != '-')
-                ncomp->start++;
-        ncomp->start++;
-        for (i=cbeg, ncomp->size=0; i<=cend; i++)
-            if (tcomp->text[i] != '-')
-                ncomp->size++;
-        if ( retAli->components == NULL)
-            retAli->components = ncomp;
-        else {
-            for (pcomp=retAli->components; pcomp->next!=NULL; pcomp=pcomp->next)
-                ;
-            pcomp->next = ncomp;
-        }
-    }
-    retAli->next = NULL;
-    retAli->textSize = cend - cbeg+1;
-    retAli = mafRowDashRm(retAli);
-    if ( retAli != NULL )
-        retAli->score = mafScoreRange(retAli, 0, cend-cbeg+1);
-    return retAli;
-}

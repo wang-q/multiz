@@ -1,6 +1,5 @@
 #ifndef MZ_PREYAMA
 #define MZ_PREYAMA
-#include "align_util.h"
 
 /*
  * mz_preyama.h version 10

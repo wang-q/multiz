@@ -32,41 +32,6 @@ char* PREFIX=NULL;
 char* OPERAT=NULL;
 char* USER_PATH=NULL;
 
-static char dna_compl[256] =
-    "                                             -                  "
-    " TVGH  CD  M KN   YSA BWXR       tvgh  cd  m kn   ysa bwxr      "
-    "                                                                "
-    "                                                                ";
-/* .............................................-.................. */
-/* @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~. */
-/* ................................................................ */
-/* ................................................................ */
-
-void do_revcompl(char *s, int len) {
-    char c, *p = s + len - 1;
-
-    while (s<=p) {
-        c = dna_compl[(uchar)*s];
-        *s = dna_compl[(uchar)*p];
-        *p = c;
-        ++s, --p;
-    }
-}
-
-void rev_comp(struct mafComp* c, int textSize) {
-    c->start = c->srcSize - (c->start + c->size);
-    c->strand = (c->strand == '-' ? '+' : '-');
-    do_revcompl(c->text, textSize);
-}
-
-// replace every component by its reverse complement
-void rc(struct mafAli *a) {
-    struct mafComp *c;
-
-    for (c = a->components; c != NULL; c = c->next)
-        rev_comp(c, a->textSize);
-}
-
 // return a mafAli structure based on the input ali starting on position beg
 struct mafAli* keep_ali(struct mafAli* ali, int beg) {
     int len, col_beg, count, i;
@@ -231,29 +196,6 @@ void seperate_cp_wk(struct mafAli** cp_list, struct mafAli** wk_list, char* chr)
     }
 }
 
-// if colth is '-', mafpos should be the first non - after that
-int colPos2Maf_after(struct mafComp* comp, int col) {
-    int i, pos;
-    for ( pos = comp->start-1, i=0; i<col; i++)
-        if (comp->text[i] != '-')
-            pos++;
-    pos++;
-    if ( pos > comp->start + comp->size - 1)
-        return -1;
-    return pos;
-}
-
-// if colth is '-', mafpos should be the last non - before that
-int colPos2Maf_before(struct mafComp* comp, int col) {
-    int i, pos;
-    for (pos = comp->start-1, i=0; i<=col; i++)
-        if ( comp->text[i] != '-')
-            pos++;
-    if ( pos < comp->start)
-        return -1;
-    return pos;
-}
-
 // name and src are allocated arrays, srcName is to be parsed
 void parseSrcName(char* srcName, char* name, char* src) {
     char* ptr;
@@ -291,25 +233,6 @@ void parseSrcName2(struct mafComp* c ) {
         ++ptr;
         c->contig = copy_string(ptr);
     }
-}
-
-int overlap(int beg1, int end1, int beg2, int end2) {
-    int over_beg, over_end, over_len;
-    double over_threshold;
-
-    if ( beg2 > end1 || beg1 > end2 )
-        return 0;
-
-    over_beg = ( beg1 > beg2 ? beg1 : beg2);
-    over_end = ( end1 < end2 ? end1 : end2);
-    over_len = over_end - over_beg + 1;
-    over_threshold = (double)OVERLAP_THRESHOLD/100;
-
-    if ( (double)over_len/(end1-beg1+1) > over_threshold
-            || (double)over_len/(end2-beg2+1) > over_threshold
-            || over_len >= OVERLAP_LEN_THREH )
-        return 1;
-    return 0;
 }
 
 

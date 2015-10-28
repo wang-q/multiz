@@ -9,9 +9,7 @@
 #include "multi_util.h"
 #include "mz_preyama.h"
 #include "mz_yama.h"
-#include "maf.h"
 #include "mz_scores.h"
-#include "align_util.h"
 
 static const char rcsid[] = "$Id: mz_preyama.c 142 2008-11-12 18:55:23Z rico $";
 

@@ -1,8 +1,6 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-/* $Id: util.h 141 2008-11-12 18:52:48Z rico $ */
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,11 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 
-
-
-
 typedef unsigned char uchar;
-typedef int bool;
 
 extern char *argv0;
 

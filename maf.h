@@ -80,13 +80,6 @@ void mafWrite(FILE *f, struct mafAli *maf);
 /* Write next alignment to file. */
 
 struct mafAli* mafColDashRm(struct mafAli *a);
-/* remove columns which contain all dashes. */
-
-struct mafAli* mafRowDashRm(struct mafAli *a);
-
-/* construct a new component. */
-
-struct mafAli* make_part_ali(struct mafAli* template, int cbeg, int cend);
 
 struct mafComp *mafCpyComp(struct mafComp*);
 
