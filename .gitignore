@@ -13,3 +13,9 @@ a.out
 multiz
 *.exe
 multiz.exe
+multic
+multic.exe
+
+*.png
+*.dot
+*.expand
