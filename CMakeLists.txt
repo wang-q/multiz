@@ -15,10 +15,6 @@ set(SOURCE_FILES
         mz_preyama.c
         mz_scores.h
         mz_scores.c
-        speciesTree.h
-        speciesTree.c
-        nib.h
-        nib.c
         seq.h
         seq.c
         charvec.h

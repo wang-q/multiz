@@ -13,40 +13,6 @@ struct str_node {
     struct str_node* next;
 };
 
-/*
-struct uAli {
-  struct mafAli* ali;
-  char* used;
-  struct uAli* next;
-  int start, end, size, index;
-  char flipped, *topcontig;
-};
-
-struct pwuAli {
-  struct uAli* pw;
-  struct pwuAli* next;
-  int cbeg, cend;
-};
-
-struct pwAlis {
-  struct pwuAli ***bArrs;
-  int *bCountArr, *countArr;
-  char** topSpeciesArr, **botSpeciesArr, **fns;
-  int pairK;
-};
-
-typedef struct name_list_ {
-  char *name;
-  struct name_list_ *next;
-} NameList, *NameListPtr;
-
-typedef struct tree_node_ {
-  int id, type;
-  NameListPtr names;      // leaf-species names
-} TreeNode, *TreeNodePtr;
-
-*/
-
 void do_revcompl(char *s, int len);
 void rev_comp(struct mafComp* c, int textSize);
 void rc(struct mafAli *a);
@@ -115,7 +81,6 @@ void parseSrcName(char* srcName, char* name, char* src);
 void parseSrcName2(struct mafComp*);
 
 int overlap(int beg1, int end1, int beg2, int end2);
-void print_ali_list(struct mafAli* root, FILE* fpw);
 
 int mafPos2Col_v2(struct mafComp *c, int pos);
 
@@ -126,9 +91,5 @@ int mafPos2Col_v2(struct mafComp *c, int pos);
 
 //int sort_uAli_contigs(struct uAli** uAliArr, int arrSize, int structSize);
 //struct pwAlis* setup_pwAlis(NameListPtr leftNames, NameListPtr rightNames, char* postfix);
-
-int compute_ss(struct mafAli* ali, int cbeg, int cend);
-
-int y_intercept(struct mafAli* pw, int x0);
 
 #endif
