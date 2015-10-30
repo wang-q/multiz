@@ -21,14 +21,6 @@ int MIN_DISTANCE = 400;
 int MIN_SPB = -100;
 int row2 = 0;
 
-int force = 0;
-int execute = 1;
-int verbose = 1;
-
-char *PREFIX = NULL;
-char *OPERAT = NULL;
-char *USER_PATH = NULL;
-
 // return a mafAli structure based on the input ali starting on position beg
 struct mafAli *keep_ali(struct mafAli *ali, int beg) {
     int len, col_beg, count, i;
@@ -224,5 +216,3 @@ void parseSrcName2(struct mafComp *c) {
         c->contig = copy_string(ptr);
     }
 }
-
-
