@@ -270,10 +270,8 @@ void mafWrite(FILE *f, struct mafAli *a) {
     for (c = a->components; c != NULL; c = c->next) {
         parseSrcName(c->src, name, chr);
         strcpy(src, name);
-        if (strcmp(name, chr) != 0) {
-            strcat(src, ".");
-            strcat(src, chr);
-        }
+        strcat(src, ".");
+        strcat(src, chr);
         fprintf(f, "s %-*s %*d %*d %c %*d %s\n",
                 srcChars, src, startChars, c->start, sizeChars, c->size,
                 c->strand, srcSizeChars, c->srcSize, c->text);
