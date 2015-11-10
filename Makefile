@@ -1,4 +1,4 @@
-CC = gcc-5
+CC = gcc
 CFLAGS = -Wall -Wextra
 CFLAGS += -O0
 

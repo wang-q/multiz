@@ -17,9 +17,6 @@ set(SOURCE_FILES
         mz_scores.c
         mz_yama.h
         mz_yama.c
-        align_util.h
-        align_util.c
 )
 
 add_executable(multiz ${SOURCE_FILES})
-
