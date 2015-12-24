@@ -5,6 +5,7 @@
  */
 // mini-maf.h - Multiple alignment format, header file stolen from Jim Kent and abused
 #include <stdio.h>
+#include <zlib.h>
 
 #define MAX_INT ((int)(~(1<<(sizeof(int)*8-1))))
 #define MIN_INT ((int)(1<<(sizeof(int)*8-1)))
@@ -18,7 +19,7 @@ struct mafFile {
     char *fileName;
     int line_nbr;
     int verbose;
-    FILE *fp;            // Open file if any. NULL except while parsing.
+    gzFile *fp;            // Open file if any. NULL except while parsing.
 };
 
 void mafFileFree(struct mafFile **pObj);

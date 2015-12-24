@@ -9,15 +9,16 @@
 
 struct mafFile *mafOpen(char *fileName, int verbose) {
     struct mafFile *mf;
-    FILE *fp;
+    gzFile *fp;
     char buf[500], *s;
+    int *errnum = 0;
 
     mf = ckalloc(sizeof(struct mafFile));
     mf->next = NULL;
-    fp = mf->fp = ckopen(fileName, "r");
-    if (fgets(buf, 500, fp) == NULL) {
-        if (ferror(fp))
-            fprintf(stderr, "error file reading\n");
+    fp = mf->fp = gzopen(fileName, "r");
+    if (gzgets(fp, buf, 500) == NULL) {
+        if (gzerror(fp, errnum))
+            fprintf(stderr, "error file reading, errnum [%d]\n", *errnum);
         fatalf("empty file %s", fileName);
     }
     if (sscanf(buf, "##maf version=%d", &(mf->version)) != 1)
@@ -47,11 +48,11 @@ int need(unsigned long n, char **linep, unsigned long *np) {
     return 0;
 }
 
-unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
+unsigned long get_line(char **linep, unsigned long *np, gzFile *fp) {
     int ch;
     unsigned long n = 0;
 
-    while ((ch = fgetc(fp)) != -1) {
+    while ((ch = gzgetc(fp)) != -1) {
         if (need(n + 1, linep, np))
             return -1;
         (*linep)[n++] = ch;
@@ -66,7 +67,7 @@ unsigned long get_line(char **linep, unsigned long *np, FILE *fp) {
     return n;
 }
 
-unsigned long get_maf_line(char **linep, unsigned long *np, FILE *fp,
+unsigned long get_maf_line(char **linep, unsigned long *np, gzFile *fp,
                            struct mafFile *mf) {
     long nn;
 
@@ -126,7 +127,7 @@ int parseScoreLine(char *line, struct mafAli *ali) {
 
 /* ------- end of code to read arbitrarily long lines and echo comments --- */
 struct mafAli *mafNext(struct mafFile *mf) {
-    FILE *fp = mf->fp;
+    gzFile *fp = mf->fp;
     struct mafAli *a = ckalloc(sizeof(struct mafAli));
     struct mafComp *c, *last;
     char buf[500], blockHeaderLine[1000];
@@ -138,7 +139,7 @@ struct mafAli *mafNext(struct mafFile *mf) {
         if (line[0] != '#' && line[0] != '\n' && line[0] != ' ')
             break;
     if (len == -1) {
-        fclose(fp);
+        gzclose(fp);
         mf->fp = NULL;
         return NULL;
     }
@@ -320,7 +321,7 @@ void mafFileFree(struct mafFile **pmf) {
     struct mafAli *a, *next;
 
     if (mf->fp != NULL && strcmp(mf->fileName, "/dev/stdin") != 0)
-        fclose(mf->fp);
+        gzclose(mf->fp);
     if (mf->scoring != NULL)
         free(mf->scoring);
     free(mf->fileName);

@@ -29,15 +29,6 @@ void fatalf(const char *fmt, ...) {
     exit(1);
 }
 
-/* ckopen -------------------------------------- open file; check for success */
-FILE *ckopen(const char *name, const char *mode) {
-    FILE *fp;
-
-    if ((fp = fopen(name, mode)) == NULL)
-        fatalf("Cannot open %s.", name);
-    return fp;
-}
-
 void *ckalloc(size_t amount) {
     void *p;
 
@@ -52,7 +43,6 @@ void *ckalloc(size_t amount) {
     return p;
 }
 
-
 /* copy_string ---------------------- save string s somewhere; return address */
 char *copy_string(const char *s) {
     char *p = ckalloc(strlen(s) + 1);    /* +1 to hold '\0' */
@@ -60,7 +50,6 @@ char *copy_string(const char *s) {
     //strcpy(p, s);
     //return p;
 }
-
 
 void fatalfr(const char *fmt, ...) {
     va_list ap;
@@ -73,4 +62,3 @@ void fatalfr(const char *fmt, ...) {
     va_end(ap);
     exit(1);
 }
-
