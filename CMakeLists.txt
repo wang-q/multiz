@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.3)
-project(multiz_tba)
+project(multiz)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+find_package(ZLIB REQUIRED)
 
 set(SOURCE_FILES
         multiz.c
@@ -19,4 +21,7 @@ set(SOURCE_FILES
         mz_yama.c
 )
 
+include_directories(${ZLIB_INCLUDE_DIRS})
+
 add_executable(multiz ${SOURCE_FILES})
+target_link_libraries(multiz ${ZLIB_LIBRARIES})
