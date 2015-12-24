@@ -1,6 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
-CFLAGS += -O0
+CFLAGS = -Wall -O0
 LDFLAGS= -L. -lz
 
 PROGS = multiz

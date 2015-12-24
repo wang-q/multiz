@@ -9,7 +9,7 @@
 
 struct mafFile *mafOpen(char *fileName, int verbose) {
     struct mafFile *mf;
-    gzFile *fp;
+    gzFile fp;
     char buf[500], *s;
     int *errnum = 0;
 
@@ -48,7 +48,7 @@ int need(unsigned long n, char **linep, unsigned long *np) {
     return 0;
 }
 
-unsigned long get_line(char **linep, unsigned long *np, gzFile *fp) {
+unsigned long get_line(char **linep, unsigned long *np, gzFile fp) {
     int ch;
     unsigned long n = 0;
 
@@ -67,7 +67,7 @@ unsigned long get_line(char **linep, unsigned long *np, gzFile *fp) {
     return n;
 }
 
-unsigned long get_maf_line(char **linep, unsigned long *np, gzFile *fp,
+unsigned long get_maf_line(char **linep, unsigned long *np, gzFile fp,
                            struct mafFile *mf) {
     long nn;
 
@@ -127,7 +127,7 @@ int parseScoreLine(char *line, struct mafAli *ali) {
 
 /* ------- end of code to read arbitrarily long lines and echo comments --- */
 struct mafAli *mafNext(struct mafFile *mf) {
-    gzFile *fp = mf->fp;
+    gzFile fp = mf->fp;
     struct mafAli *a = ckalloc(sizeof(struct mafAli));
     struct mafComp *c, *last;
     char buf[500], blockHeaderLine[1000];

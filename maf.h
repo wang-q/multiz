@@ -19,7 +19,7 @@ struct mafFile {
     char *fileName;
     int line_nbr;
     int verbose;
-    gzFile *fp;            // Open file if any. NULL except while parsing.
+    gzFile fp;            // Open file if any. NULL except while parsing.
 };
 
 void mafFileFree(struct mafFile **pObj);
