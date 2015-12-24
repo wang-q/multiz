@@ -19,3 +19,6 @@ multic.exe
 *.png
 *.dot
 *.expand
+
+*.maf
+*.maf.gz
